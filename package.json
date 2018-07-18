@@ -1,0 +1,20 @@
+{
+  "name": "maga",
+  "version": "1.0.0",
+  "description": "Fetch recent Donald Trump tweets and send them to a Discord webhook",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "big-integer": "^1.6.32",
+    "diff": "^3.5.0",
+    "he": "^1.1.1",
+    "html-entities": "^1.2.1",
+    "request": "^2.83.0",
+    "twitter": "^1.7.1"
+  }
+}
