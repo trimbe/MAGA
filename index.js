@@ -20,14 +20,14 @@ const client = new twitter({
 	access_token_secret: config.twitter.access_token_secret
 });
 
-
+const prevTweets = [];
 const checkInterval = setInterval(checkTweets, 2 * 60 * 1000);
 
 const webhook = config.webhook;
 const trumpUserId = "25073877";
 
 function checkTweets() {
-	client.get('statuses/user_timeline', { user_id: trumpUserId, count: 50, tweet_mode: "extended" }, function(error, tweets) {
+	client.get('statuses/user_timeline', { user_id: trumpUserId, since_id: last_id, tweet_mode: "extended" }, function(error, tweets) {
 		if(error) {
 			console.log(error);
 			return;
@@ -36,7 +36,6 @@ function checkTweets() {
 		if(tweets.length == 0)
 			return;
 
-		var newTweets = [];
 		var newestId = tweets[0].id_str;
 
 		if(last_id == "") {
@@ -45,27 +44,21 @@ function checkTweets() {
 			return;
 		}
 
-		tweets.forEach(function(tweet, index) {
-			if(bigInt(tweet.id_str).compare(last_id) == 1) {
-				newTweets.push(tweet);
-			}
-		});
-
 		// don't spam when script hasn't been running for some time
-		if(newTweets.length > 5) {
-			newTweets = [];
+		if(tweets.length > 5) {
+			tweets = [];
 		}
 
 		// we want to post these in chronological order, twitter returns newest first
-		newTweets.reverse();
+		tweets.reverse();
 	
 		var tweetsToPost = [];
-		newTweets.forEach(function(newTweet) {
+		tweets.forEach(function(newTweet) {
 			console.log("New Tweet: " + newTweet.full_text + "\n ID: " + newTweet.id_str);
 	
 			tweetsToPost.push(newDiscordPost(entities.decode(newTweet.full_text), "Donald J. Trump"));			
 
-			tweets.forEach(function(tweet) {
+			prevTweets.forEach(function(tweet) {
 				// typo'd?
 				if(bigInt(tweet.id_str).compare(newTweet.id_str) == -1 && levenshtein(tweet.full_text, newTweet.full_text) < 25) {
 					var diff = jsdiff.diffWords(entities.decode(tweet.full_text), entities.decode(newTweet.full_text));
@@ -85,6 +78,11 @@ function checkTweets() {
 					console.log("Found a typo: " + diffStr);
 				}
 			});
+
+			prevTweets.push(newTweet);
+			if(prevTweets.length > 20) {
+				prevTweets.shift();
+			}
 		});
 	
 		async.series(tweetsToPost);
