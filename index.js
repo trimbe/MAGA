@@ -27,7 +27,14 @@ const webhook = config.webhook;
 const trumpUserId = "25073877";
 
 function checkTweets() {
-	client.get('statuses/user_timeline', { user_id: trumpUserId, since_id: last_id, tweet_mode: "extended" }, function(error, tweets) {
+	let options = { 
+		user_id: trumpUserId,
+		tweet_mode: "extended"
+	};
+
+	if(last_id !== "") options.since_id = last_id;
+
+	client.get('statuses/user_timeline', options, function(error, tweets) {
 		if(error) {
 			console.log(error);
 			return;
