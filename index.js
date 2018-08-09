@@ -60,7 +60,10 @@ function checkTweets() {
 
 			prevTweets.forEach(function(tweet) {
 				// typo'd?
-				if(bigInt(tweet.id_str).compare(newTweet.id_str) == -1 && levenshtein(tweet.full_text, newTweet.full_text) < 25) {
+				if(bigInt(tweet.id_str).compare(newTweet.id_str) == -1 
+					&& levenshtein(tweet.full_text, newTweet.full_text) < 25
+					&& Math.abs(tweet.full_text.length - newTweet.full_text.length) < 25
+					&& newTweet.full_text.length > 40) {
 					var diff = jsdiff.diffWords(entities.decode(tweet.full_text), entities.decode(newTweet.full_text));
 					var diffStr = "";
 					diff.forEach(function(part) {
