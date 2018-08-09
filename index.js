@@ -11,7 +11,7 @@ const entities = new Entities();
 
 var last_id_file = "last_id";
 
-var last_id = fs.readFileSync(last_id_file, "utf8");
+var last_id = fs.readFileSync(last_id_file, { encoding: "utf8", flag: "a+" });
 
 const client = new twitter({
 	consumer_key: config.twitter.consumer_key,
