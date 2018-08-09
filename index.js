@@ -104,7 +104,7 @@ const newDiscordPost = (message, username) => {
 				}
 			},
 			function(error, response, body) {
-				callback();
+				setTimeout(callback, 1000);
 			}
 		);
 	};
