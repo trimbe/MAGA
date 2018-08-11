@@ -73,15 +73,20 @@ function checkTweets() {
 					&& newTweet.full_text.length > 40) {
 					var diff = jsdiff.diffWords(entities.decode(tweet.full_text), entities.decode(newTweet.full_text));
 					var diffStr = "";
+					var anyDiff = false;
 					diff.forEach(function(part) {
 						if(part.added) {
 							diffStr += "+(" + part.value.trim() + ") ";
+							anyDiff = true;
 						} else if (part.removed) {
 							diffStr += "-(" + part.value.trim() + ") ";
+							anyDiff = true;
 						} else {
 							diffStr += part.value + "";
 						}
 					});
+
+					if(!anyDiff) continue;
 
 					tweetsToPost.push(newDiscordPost("Typo detected: \n" + diffStr, "Donald J. Trump (TYPO)"))
 
