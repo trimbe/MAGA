@@ -86,7 +86,7 @@ function checkTweets() {
 						}
 					});
 
-					if(!anyDiff) continue;
+					if(!anyDiff) return;
 
 					tweetsToPost.push(newDiscordPost("Typo detected: \n" + diffStr, "Donald J. Trump (TYPO)"))
 
