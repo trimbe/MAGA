@@ -61,6 +61,9 @@ function checkTweets() {
 	
 		var tweetsToPost = [];
 		tweets.forEach(function(newTweet) {
+			if(newTweet.hasOwnProperty("retweeted_status"))
+				return;
+				
 			console.log("New Tweet: " + newTweet.full_text + "\n ID: " + newTweet.id_str);
 	
 			tweetsToPost.push(newDiscordPost(entities.decode(newTweet.full_text), "Donald J. Trump"));			
