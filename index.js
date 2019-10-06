@@ -71,7 +71,7 @@ function checkTweets() {
 				return;
 			}
 
-			if (bigInt(newTweet.id_str).compare(last_id) == -1) {
+			if (bigInt(newTweet.id_str).compare(last_id) != 1) {
 				console.log(newTweet.id_str + " vs " + last_id);
 				return;
 			}
